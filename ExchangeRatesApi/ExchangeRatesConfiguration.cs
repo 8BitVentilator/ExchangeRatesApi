@@ -3,32 +3,34 @@ using System.Collections.Generic;
 
 namespace ExchangeRatesApi
 {
-    public class ExchangeRatesConfiguration
+    internal class ExchangeRatesConfiguration
     {
-        protected const string DEFAULT_BASE = "EUR";
+        public const Currency DEFAULT_BASE = Currency.EUR;
 
-        public string Base { get; set; }
-        public List<string> Symbols { get; internal set; }
+        public Currency Base { get; set; } = DEFAULT_BASE;
+        public IEnumerable<Currency> Symbols { get; set; } = new Currency[0];
 
-        internal virtual bool HasDate { get; }
-        internal DateTime Date { get; set; }
+        public bool HasDate { get; } = false;
+        public DateTime Date { get; }
 
-        internal virtual bool HasHistoricalDates { get; }
-        internal DateTime StartAt { get; set; }
-        internal DateTime EndAt { get; set; }
+        public bool HasHistoricalDates { get; } = false;
+        public DateTime StartAt { get; }
+        public DateTime EndAt { get; }
 
         public ExchangeRatesConfiguration()
-            : this(DEFAULT_BASE)
         { }
 
-        public ExchangeRatesConfiguration(string @base)
-            : this(@base, new string[0])
-        { }
-
-        public ExchangeRatesConfiguration(string @base, IEnumerable<string> symbols)
+        public ExchangeRatesConfiguration(DateTime date)
         {
-            this.Base = @base;
-            this.Symbols = new List<string>(symbols);
+            this.HasDate = true;
+            this.Date = date;
+        }
+
+        public ExchangeRatesConfiguration(DateTime startAt, DateTime endAt)
+        {
+            this.HasHistoricalDates = true;
+            this.StartAt = startAt;
+            this.EndAt = endAt;
         }
     }
 }

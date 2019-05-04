@@ -3,9 +3,11 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28307.329
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRatesApi", "ExchangeRatesApi\ExchangeRatesApi.csproj", "{25FAA0E0-58BE-4E5B-956C-CC7B16BD9C71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ExchangeRatesApi", "ExchangeRatesApi\ExchangeRatesApi.csproj", "{25FAA0E0-58BE-4E5B-956C-CC7B16BD9C71}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRatesApi.Test", "ExchangeRatesApi.Test\ExchangeRatesApi.Test.csproj", "{66A1C22A-D28B-461A-B761-13FD93F55862}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExchangeRatesApi.Example", "ExchangeRatesApi.Example\ExchangeRatesApi.Example.csproj", "{A8CFDE1E-3D37-45BC-AC66-771AFEE2BFA1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{66A1C22A-D28B-461A-B761-13FD93F55862}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66A1C22A-D28B-461A-B761-13FD93F55862}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66A1C22A-D28B-461A-B761-13FD93F55862}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A8CFDE1E-3D37-45BC-AC66-771AFEE2BFA1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A8CFDE1E-3D37-45BC-AC66-771AFEE2BFA1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A8CFDE1E-3D37-45BC-AC66-771AFEE2BFA1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A8CFDE1E-3D37-45BC-AC66-771AFEE2BFA1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -10,67 +11,119 @@ namespace ExchangeRatesApi
     public class ExchangeRates
     {
         public ILogger Logger { get; set; }
-        public ExchangeRatesConfiguration Configuration { get; private set; }
 
         private readonly HttpClient client = new HttpClient();
-        private readonly RequestBuilder builder = new RequestBuilder();
         private readonly Uri uri = new Uri("https://api.exchangeratesapi.io");
 
-        public ExchangeRates()
-            : this(new ExchangeRatesConfiguration())
-        { }
-
-        public ExchangeRates(ExchangeRatesConfiguration configuration)
-        {
-            this.Configuration = configuration;
-        }
-
         public async Task<ExchangeRatesResponse> GetLastestExchangeRatesAsync()
-        {
-            this.Configuration = new ExchangeRatesConfiguration(
-                this.Configuration.Base, 
-                this.Configuration.Symbols
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration()
             );
 
-            return await this.GetExchangeRatesAsync<ExchangeRatesResponse>();
-        }
+        public async Task<ExchangeRatesResponse> GetLastestExchangeRatesAsync(Currency @base)
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration
+                {
+                    Base = @base
+                }
+            );
+
+        public async Task<ExchangeRatesResponse> GetLastestExchangeRatesAsync(IEnumerable<Currency> symbols)
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration
+                {
+                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                }
+            );
+
+        public async Task<ExchangeRatesResponse> GetLastestExchangeRatesAsync(Currency @base, IEnumerable<Currency> symbols)
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration
+                {
+                    Base = @base,
+                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                }
+            );
 
         public async Task<ExchangeRatesResponse> GetExchangeRatesByDateAsync(DateTime date)
-        {
-            this.Configuration = new ExchangeRatesDateConfiguration(
-                this.Configuration.Base,
-                this.Configuration.Symbols,
-                date
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration(date)
             );
 
-            return await this.GetExchangeRatesAsync<ExchangeRatesResponse>();
-        }
+        public async Task<ExchangeRatesResponse> GetExchangeRatesByDateAsync(DateTime date, Currency @base)
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration(date)
+                {
+                    Base = @base
+                }
+            );
+
+        public async Task<ExchangeRatesResponse> GetExchangeRatesByDateAsync(DateTime date, IEnumerable<Currency> symbols)
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration(date)
+                {
+                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                }
+            );
+
+        public async Task<ExchangeRatesResponse> GetExchangeRatesByDateAsync(DateTime date, Currency @base, IEnumerable<Currency> symbols)
+            => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
+                new ExchangeRatesConfiguration(date)
+                {
+                    Base = @base,
+                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                }
+            );
 
         public async Task<ExchangeRatesHistoricalResponse> GetHistoricalExchangeRatesAsync(DateTime startAt, DateTime endAt)
-        {
-
-            this.Configuration = new ExchangeRatesHistoricalConfiguration(
-                this.Configuration.Base,
-                this.Configuration.Symbols,
-                startAt,
-                endAt
+            => await this.GetExchangeRatesAsync<ExchangeRatesHistoricalResponse>(
+                new ExchangeRatesConfiguration(startAt, endAt)
             );
 
-            return await this.GetExchangeRatesAsync<ExchangeRatesHistoricalResponse>();
-        }
+        public async Task<ExchangeRatesHistoricalResponse> GetHistoricalExchangeRatesAsync(DateTime startAt, DateTime endAt, Currency @base)
+            => await this.GetExchangeRatesAsync<ExchangeRatesHistoricalResponse>(
+                new ExchangeRatesConfiguration(startAt, endAt)
+                {
+                    Base = @base
+                }
+            );
 
-        private async Task<T> GetExchangeRatesAsync<T>()
+        public async Task<ExchangeRatesHistoricalResponse> GetHistoricalExchangeRatesAsync(DateTime startAt, DateTime endAt, IEnumerable<Currency> symbols)
+            => await this.GetExchangeRatesAsync<ExchangeRatesHistoricalResponse>(
+                new ExchangeRatesConfiguration(startAt, endAt)
+                {
+                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                }
+            );
+
+        public async Task<ExchangeRatesHistoricalResponse> GetHistoricalExchangeRatesAsync(DateTime startAt, DateTime endAt, Currency @base, IEnumerable<Currency> symbols)
+            => await this.GetExchangeRatesAsync<ExchangeRatesHistoricalResponse>(
+                new ExchangeRatesConfiguration(startAt, endAt)
+                {
+                    Base = @base,
+                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                }
+            );
+
+        private async Task<T> GetExchangeRatesAsync<T>(ExchangeRatesConfiguration configuration)
         {
-            var parameters = this.builder.Build(this.Configuration);
-            this.Log(parameters);
-            
-            var response = await client.GetAsync($"{this.uri}{parameters}");
+            var request = this.GetRequestString(configuration);
+            this.Log(request);
+
+            var response = await this.GetResponse(request);
             response.EnsureSuccessStatusCode();
 
-            return JsonConvert.DeserializeObject<T>(
-                await response.Content.ReadAsStringAsync()
-            );
+            return this.Deserialize<T>(await response.Content.ReadAsStringAsync());
         }
+
+        private string GetRequestString(ExchangeRatesConfiguration configuration)
+            => new RequestBuilder(configuration).Build();
+
+        private async Task<HttpResponseMessage> GetResponse(string request)
+            => await client.GetAsync($"{this.uri}{request}");
+
+        private T Deserialize<T>(string json)
+            => JsonConvert.DeserializeObject<T>(json);
 
         private void Log(string message)
         {
