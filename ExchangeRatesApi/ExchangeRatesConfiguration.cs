@@ -9,7 +9,13 @@ namespace ExchangeRatesApi
         public static readonly DateTime MIN_DATE = new DateTime(1999, 01, 04);
 
         public Currency Base { get; set; } = DEFAULT_BASE;
-        public IEnumerable<Currency> Symbols { get; set; } = new Currency[0];
+
+        private IEnumerable<Currency> symbols = new Currency[0];
+        public IEnumerable<Currency> Symbols
+        {
+            get => this.symbols;
+            set => this.symbols = value ?? throw new ArgumentNullException(nameof(value));
+        }
 
         public bool HasDate { get; } = false;
         public DateTime Date { get; }

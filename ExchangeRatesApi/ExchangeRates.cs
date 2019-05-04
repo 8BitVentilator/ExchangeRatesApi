@@ -48,7 +48,7 @@ namespace ExchangeRatesApi
             => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
                 new ExchangeRatesConfiguration
                 {
-                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                    Symbols = symbols
                 }
             );
 
@@ -63,7 +63,7 @@ namespace ExchangeRatesApi
                 new ExchangeRatesConfiguration
                 {
                     Base = @base,
-                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                    Symbols = symbols
                 }
             );
 
@@ -103,7 +103,7 @@ namespace ExchangeRatesApi
             => await this.GetExchangeRatesAsync<ExchangeRatesResponse>(
                 new ExchangeRatesConfiguration(date)
                 {
-                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                    Symbols = symbols
                 }
             );
 
@@ -119,7 +119,7 @@ namespace ExchangeRatesApi
                 new ExchangeRatesConfiguration(date)
                 {
                     Base = @base,
-                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                    Symbols = symbols
                 }
             );
 
@@ -162,7 +162,7 @@ namespace ExchangeRatesApi
             => await this.GetExchangeRatesAsync<ExchangeRatesHistoricalResponse>(
                 new ExchangeRatesConfiguration(startAt, endAt)
                 {
-                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                    Symbols = symbols
                 }
             );
 
@@ -179,7 +179,7 @@ namespace ExchangeRatesApi
                 new ExchangeRatesConfiguration(startAt, endAt)
                 {
                     Base = @base,
-                    Symbols = symbols ?? throw new ArgumentNullException(nameof(symbols))
+                    Symbols = symbols
                 }
             );
 
