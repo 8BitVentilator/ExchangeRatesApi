@@ -7,7 +7,7 @@ published by the European Central Bank.
 ## Usage
 First, create an instance of the wrapper.
 ```csharp
-var api = new ExchangeRates();
+var api = new ExchangeRates("INSERT API ACCESS KEY");
 ```
 Get the latest foreign exchange reference rates.
 ```csharp
