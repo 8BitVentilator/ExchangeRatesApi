@@ -7,8 +7,8 @@ namespace ExchangeRatesApi.Example
     {
         static void Main(string[] args)
         {
-            var api = new ExchangeRates();
-            var response = api.GetExchangeRatesByDateAsync(new DateTime(1999, 01, 01)).Result;
+            var api = new ExchangeRates("INSERT API ACCESS KEY", false);
+            var response = api.GetExchangeRatesByDateAsync(new DateTime(1999, 01, 04)).Result;
             Console.WriteLine($"Base: {response.Base}");
             Console.WriteLine($"Date: {response.Date}");
             Console.WriteLine("Rates:");

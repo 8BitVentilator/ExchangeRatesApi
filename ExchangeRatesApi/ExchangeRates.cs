@@ -5,15 +5,22 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 
-
 namespace ExchangeRatesApi
 {
-    public class ExchangeRates
+    public sealed class ExchangeRates
     {
         public ILogger Logger { get; set; }
 
-        private readonly HttpClient client = new HttpClient();
-        private readonly Uri uri = new Uri("https://api.exchangeratesapi.io");
+        private readonly string _apiAccessKey;
+
+        private readonly HttpClient _client = new HttpClient();
+        private readonly Uri _uri;
+
+        public ExchangeRates(string apiAccessKey, bool useHttps = true)
+        {
+            _apiAccessKey = apiAccessKey;
+            _uri = new($"{(useHttps ? "https" : "http")}://api.exchangeratesapi.io/v1/");
+        }
 
         /// <summary>
         /// Get the latest foreign exchange reference rates.
@@ -191,14 +198,15 @@ namespace ExchangeRatesApi
             var response = await this.GetResponse(request);
             response.EnsureSuccessStatusCode();
 
-            return this.Deserialize<T>(await response.Content.ReadAsStringAsync());
+            var content = await response.Content.ReadAsStringAsync();
+            return this.Deserialize<T>(content);
         }
 
         private string GetRequestString(ExchangeRatesConfiguration configuration)
-            => new RequestBuilder(configuration).Build();
+            => new RequestBuilder(configuration).Build(_apiAccessKey);
 
         private async Task<HttpResponseMessage> GetResponse(string request)
-            => await client.GetAsync($"{this.uri}{request}");
+            => await _client.GetAsync($"{_uri}{request}");
 
         private T Deserialize<T>(string json)
             => JsonConvert.DeserializeObject<T>(json);

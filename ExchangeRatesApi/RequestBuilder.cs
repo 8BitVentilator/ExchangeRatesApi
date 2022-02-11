@@ -5,7 +5,7 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("ExchangeRatesApi.Test")]
 namespace ExchangeRatesApi
 {
-    internal class RequestBuilder
+    internal sealed class RequestBuilder
     {
         private const string DATE_FORMAT = "yyyy-MM-dd";
 
@@ -16,9 +16,9 @@ namespace ExchangeRatesApi
             this.configuration = configuration;
         }
 
-        public string Build()
+        public string Build(string apiAccessKey)
         {
-            var parameters = string.Join("&", this.GetParameters());
+            var parameters = string.Join("&", this.GetParameters().Concat(new[] { this.GetApiAccessKey(apiAccessKey) }));
 
             return !string.IsNullOrWhiteSpace(parameters)
                     ? $"{this.GetEndpint()}?{parameters}"
@@ -38,7 +38,7 @@ namespace ExchangeRatesApi
                 yield return this.GetStartAt();
             if (configuration.HasHistoricalDates)
                 yield return this.GetEndAt();
-            if (configuration.Base != ExchangeRatesConfiguration.DEFAULT_BASE)
+            if (configuration.Base != ExchangeRatesConfiguration.DefaultBase)
                 yield return this.GetBase();
             if (this.HasSymbols())
                 yield return this.GetSymbols();
@@ -58,5 +58,8 @@ namespace ExchangeRatesApi
 
         private string GetSymbols()
             => $"symbols={string.Join(",", configuration.Symbols)}";
+
+        private string GetApiAccessKey(string apiAccessKey)
+            => $"access_key={apiAccessKey}";
     }
 }

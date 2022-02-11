@@ -5,12 +5,12 @@ namespace ExchangeRatesApi
 {
     internal class ExchangeRatesConfiguration
     {
-        public static readonly Currency DEFAULT_BASE = Currency.EUR;
-        public static readonly DateTime MIN_DATE = new DateTime(1999, 01, 04);
+        public static readonly Currency DefaultBase = Currency.EUR;
+        public static readonly DateTime MinDate = new(1999, 01, 04);
 
-        public Currency Base { get; set; } = DEFAULT_BASE;
+        public Currency Base { get; set; } = DefaultBase;
 
-        private IEnumerable<Currency> symbols = new Currency[0];
+        private IEnumerable<Currency> symbols = Array.Empty<Currency>();
         public IEnumerable<Currency> Symbols
         {
             get => this.symbols;
@@ -29,7 +29,7 @@ namespace ExchangeRatesApi
 
         public ExchangeRatesConfiguration(DateTime date)
         {
-            if (date < MIN_DATE)
+            if (date < MinDate)
                 throw new ArgumentOutOfRangeException(
                     nameof(date),
                     ExchangeRatesConfigurationRes.NoDataExceptionMessage

@@ -9,9 +9,9 @@ namespace ExchangeRatesApi.Test
     {
         [Theory]
         [ClassData(typeof(RequestBuilderTestData))]
-        internal void TestTheory(ExchangeRatesConfiguration configuration, string expected)
+        internal void TestTheory(ExchangeRatesConfiguration configuration, string apiAccessKey, string expected)
         {
-            Assert.Equal(expected, new RequestBuilder(configuration).Build());
+            Assert.Equal(expected, new RequestBuilder(configuration).Build(apiAccessKey));
         }
     }
 
@@ -28,19 +28,22 @@ namespace ExchangeRatesApi.Test
             yield return new object[]
             {
                 new ExchangeRatesConfiguration(),
-                "latest"
+                "1234567890",
+                "latest?access_key=1234567890"
             };
 
             yield return new object[]
             {
                 new ExchangeRatesConfiguration(date),
-                "2000-12-31"
+                "1234567890",
+                "2000-12-31?access_key=1234567890"
             };
 
             yield return new object[]
             {
                 new ExchangeRatesConfiguration(startAt, endAt),
-                "history?start_at=2000-01-01&end_at=2000-12-31"
+                "1234567890",
+                "history?start_at=2000-01-01&end_at=2000-12-31&access_key=1234567890"
             };
 
             yield return new object[]
@@ -50,7 +53,8 @@ namespace ExchangeRatesApi.Test
                     Base = @base,
                     Symbols = symbols
                 },
-                "latest?base=USD&symbols=CHF,GBP"
+                "1234567890",
+                "latest?base=USD&symbols=CHF,GBP&access_key=1234567890"
             };
 
             yield return new object[]
@@ -60,7 +64,8 @@ namespace ExchangeRatesApi.Test
                     Base = @base,
                     Symbols = symbols
                 },
-                "2000-12-31?base=USD&symbols=CHF,GBP"
+                "1234567890",
+                "2000-12-31?base=USD&symbols=CHF,GBP&access_key=1234567890"
             };
 
             yield return new object[]
@@ -70,7 +75,8 @@ namespace ExchangeRatesApi.Test
                     Base = @base,
                     Symbols = symbols
                 },
-                "history?start_at=2000-01-01&end_at=2000-12-31&base=USD&symbols=CHF,GBP"
+                "1234567890",
+                "history?start_at=2000-01-01&end_at=2000-12-31&base=USD&symbols=CHF,GBP&access_key=1234567890"
             };
         }
 
