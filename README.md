@@ -1,5 +1,7 @@
 # ExchangeRatesApi
-An unofficial C# wrapper for the ExchangeRatesAPI. 
+An unofficial C# wrapper for the ExchangeRatesAPI.
+
+![.NET](https://github.com/8BitVentilator/ExchangeRatesApi/actions/workflows/dotnet.yml/badge.svg)
 
 This is a unofficial C# wrapper for the free ExchangeRatesAPI, which is a free service for current and historical foreign exchange rates 
 published by the European Central Bank.
