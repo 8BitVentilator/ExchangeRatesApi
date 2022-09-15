@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace ExchangeRatesApi
 {
     public abstract class ExchangeRatesResponseBase
     {
-        [JsonProperty("base")]
+        [JsonPropertyName("base")]
         public string Base { get; internal set; }
     }
 }

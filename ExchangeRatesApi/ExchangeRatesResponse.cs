@@ -1,14 +1,14 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace ExchangeRatesApi
 {
     public class ExchangeRatesResponse : ExchangeRatesResponseBase
     {
-        [JsonProperty("date")]
+        [JsonPropertyName("date")]
         public DateTime Date { get; internal set; }
-        [JsonProperty("rates")]
+        [JsonPropertyName("rates")]
         public IDictionary<string, decimal> Rates { get; internal set; } = new Dictionary<string, decimal>();
     }
 }

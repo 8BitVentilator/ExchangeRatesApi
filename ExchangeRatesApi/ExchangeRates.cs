@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 
 namespace ExchangeRatesApi
 {
@@ -209,7 +210,7 @@ namespace ExchangeRatesApi
             => await _client.GetAsync($"{_uri}{request}");
 
         private T Deserialize<T>(string json)
-            => JsonConvert.DeserializeObject<T>(json);
+            => JsonSerializer.Deserialize<T>(json);
 
         private void Log(string message)
         {
